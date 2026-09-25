@@ -1,0 +1,6 @@
+{
+  "name": "AI Career Navigator - Singapore & Global Job & Skills Intelligence",
+  "description": "Comprehensive AI career navigation platform combining unified job search, explainable matching, resume analysis, Singapore Skills Framework intelligence, interview preparation, and application tracking.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
