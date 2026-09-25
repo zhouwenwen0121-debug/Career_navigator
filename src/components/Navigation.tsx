@@ -33,7 +33,7 @@ export const Navigation: React.FC = () => {
     { id: 'interview', label: 'Interview Prep', icon: HelpCircle },
     { id: 'labour_market', label: 'Labour Market', icon: TrendingUp },
     { id: 'tracker', label: 'Applications', icon: Kanban, count: applications.length },
-    { id: 'mcp_hub', label: 'MCP & Providers', icon: Cpu }
+    { id: 'mcp_hub', label: 'Real MCP Service', icon: Cpu }
   ];
 
   const stakeholderLabels: Record<StakeholderPersona, string> = {

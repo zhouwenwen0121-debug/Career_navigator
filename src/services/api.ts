@@ -173,4 +173,59 @@ export const api = {
     }
     return res.json();
   },
+
+  // Real Model Context Protocol (MCP) Client Methods
+  async sendMcpJsonRpc(method: string, params?: any, customEndpoint?: string): Promise<any> {
+    const endpoint = customEndpoint || '/api/mcp/rpc';
+    const payload = {
+      jsonrpc: '2.0',
+      id: `mcp-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+      method,
+      params: params || {},
+    };
+
+    const res = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+
+    if (!res.ok) {
+      throw new Error(`MCP Server HTTP ${res.status}: ${res.statusText}`);
+    }
+
+    const data = await res.json();
+    if (data.error) {
+      throw new Error(`MCP Error [${data.error.code}]: ${data.error.message}`);
+    }
+
+    return data.result;
+  },
+
+  async getMcpSpec(): Promise<{
+    protocolVersion: string;
+    serverInfo: any;
+    capabilities: any;
+    tools: any[];
+    resources: any[];
+    prompts: any[];
+  }> {
+    const res = await fetch('/api/mcp/spec');
+    if (!res.ok) throw new Error('Failed to fetch MCP Server specification');
+    return res.json();
+  },
+
+  async callMcpTool(name: string, args: any, customEndpoint?: string): Promise<any> {
+    const result = await this.sendMcpJsonRpc('tools/call', { name, arguments: args }, customEndpoint);
+    // Parse content text if present
+    if (result.content?.[0]?.text) {
+      try {
+        return JSON.parse(result.content[0].text);
+      } catch {
+        return result.content[0].text;
+      }
+    }
+    return result;
+  },
 };
+

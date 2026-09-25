@@ -17,7 +17,7 @@ import { InterviewPrepView } from './components/InterviewPrepView';
 import { LabourMarketView } from './components/LabourMarketView';
 import { ApplicationTrackerView } from './components/ApplicationTrackerView';
 import { CareerNavigatorChat } from './components/CareerNavigatorChat';
-import { McpCapabilityExplorer } from './components/McpCapabilityExplorer';
+import { RealMcpHub } from './components/RealMcpHub';
 import { SafeAutoApplyModal } from './components/SafeAutoApplyModal';
 import { CheckCircle2 } from 'lucide-react';
 
@@ -50,7 +50,7 @@ const MainContent: React.FC = () => {
         {activeTab === 'interview' && <InterviewPrepView />}
         {activeTab === 'labour_market' && <LabourMarketView />}
         {activeTab === 'tracker' && <ApplicationTrackerView />}
-        {activeTab === 'mcp_hub' && <McpCapabilityExplorer />}
+        {activeTab === 'mcp_hub' && <RealMcpHub />}
       </main>
 
       {/* Guarded Auto-Apply Confirmation Modal */}

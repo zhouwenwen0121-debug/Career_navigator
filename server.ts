@@ -7,6 +7,14 @@ import { SINGAPORE_LABOUR_MARKET } from './server/data/labourMarketData.js';
 import { SKILLS_TAXONOMY, normalizeSkillName } from './server/data/skillsTaxonomy.js';
 import { MCP_CAPABILITY_MATRIX } from './server/mcp/capabilityMatrix.js';
 import {
+  handleMcpRpc,
+  handleMcpSse,
+  handleMcpMessage,
+  MCP_TOOLS_DEFINITIONS,
+  MCP_RESOURCES_DEFINITIONS,
+  MCP_PROMPTS_DEFINITIONS,
+} from './server/mcp/realMcpServer.js';
+import {
   parseResumeWithGemini,
   matchJobWithGemini,
   tailorResumeWithGemini,
@@ -235,6 +243,35 @@ app.post('/api/applications/auto-apply/simulate', (req, res) => {
       source: job.source,
       externalJobId: job.externalJobId,
     },
+  });
+});
+
+// 13. Official Model Context Protocol (MCP) Endpoints
+// Standard JSON-RPC 2.0 endpoint (supports initialize, tools/list, tools/call, resources/list, resources/read, prompts/list)
+app.post('/api/mcp/rpc', handleMcpRpc);
+
+// Server-Sent Events (SSE) Transport for interactive MCP clients
+app.get('/api/mcp/sse', handleMcpSse);
+app.post('/api/mcp/message', handleMcpMessage);
+
+// Live MCP Specification Inspection
+app.get('/api/mcp/spec', (req, res) => {
+  res.json({
+    success: true,
+    protocolVersion: '2024-11-05',
+    serverInfo: {
+      name: 'ai-career-navigator-mcp',
+      version: '1.0.0',
+      description: 'Official Singapore workforce, job matching & skills intelligence MCP server',
+    },
+    capabilities: {
+      toolsCount: MCP_TOOLS_DEFINITIONS.length,
+      resourcesCount: MCP_RESOURCES_DEFINITIONS.length,
+      promptsCount: MCP_PROMPTS_DEFINITIONS.length,
+    },
+    tools: MCP_TOOLS_DEFINITIONS,
+    resources: MCP_RESOURCES_DEFINITIONS,
+    prompts: MCP_PROMPTS_DEFINITIONS,
   });
 });
 
